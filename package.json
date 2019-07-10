@@ -1,0 +1,46 @@
+{
+    "name": "react-use-event-source-ts",
+    "version": "0.8.0",
+    "description": "A lightweight EventSource (server-sent-events) hook for react, written in TypeScript",
+    "keywords": [
+        "TypeScript",
+        "react",
+        "EventSource",
+        "sse",
+        "server-sent-events",
+        "hooks",
+        "react-hooks",
+        "redux"
+    ],
+    "author": "Santo Pfingsten",
+    "license": "MIT",
+    "homepage": "https://github.com/Lusito/react-use-event-source-ts",
+    "bugs": {
+        "url": "https://github.com/Lusito/react-use-event-source-ts/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Lusito/react-use-event-source-ts.git"
+    },
+    "files": [
+        "dist/"
+    ],
+    "scripts": {
+        "build": "tsc"
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "devDependencies": {
+        "@types/react": "^16.8.23",
+        "@types/react-redux": "^7.1.1",
+        "typescript": "^3.5.3",
+        "react": "^16.8.6",
+        "redux": "^4.0.4",
+        "react-redux": "^7.1.0"
+    },
+    "peerDependencies": {
+        "react": "^16.8.6",
+        "redux": "^4.0.0",
+        "react-redux": "^7.1.0"
+    }
+}
