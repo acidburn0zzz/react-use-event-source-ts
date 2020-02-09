@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Action, Store } from "redux";
-import { useStore } from "react-redux";
 
 type EventSourceConstructor = { new(url: string, eventSourceInitDict?: EventSourceInit): EventSource; };
 
@@ -39,9 +37,4 @@ export function useEventSourceListener(source: EventSource | null, types: string
         }
         return undefined;
     }, [source, ...dependencies]);
-}
-
-export function useEventSourceListenerRedux<S, A extends Action>(source: EventSource | null, types: string[], listener: (store: Store<S, A>, e: EventSourceEvent) => void, dependencies: any[] = []) {
-    const store = useStore<S, A>();
-    useEventSourceListener(source, types, e => listener(store, e), dependencies);
 }

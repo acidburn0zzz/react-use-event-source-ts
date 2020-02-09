@@ -13,8 +13,7 @@ A lightweight EventSource (server-sent-events) hook for react, written in TypeSc
 - Very lightweight (see the badges above for the latest size).
 - Flexible and dead simple to use.
 - Written in TypeScript
-- Only has one required peer dependency: React 16.8.6 or higher.
-- Optional peer dependencies (if you use redux): redux 4 and react-redux > 7.1.0
+- Only has one required peer dependency: React 16.12.0 or higher.
 - Liberal license: [zlib/libpng](https://github.com/Lusito/react-use-event-source-ts/blob/master/LICENSE)
 
 **Beware**: This is currently work in progress. The API might change.
@@ -30,7 +29,7 @@ This library is shipped as es2015 modules. To use them in browsers, you'll have 
 #### Plain React
 
 ```tsx
-import { useEventSource, useEventSourceListener } from "../../rest/useEventSource";
+import { useEventSource, useEventSourceListener } from "react-use-event-source-ts";
 
 function MyComponent() {
     const [messages, setMessages] = useState<Message[]>([]);
@@ -52,10 +51,18 @@ function MyComponent() {
 }
 ```
 
-#### With redux
+#### With react-redux
 
 ```tsx
-import { useEventSource, useEventSourceListenerRedux, EventSourceEvent } from "../../rest/useEventSource";
+import { useEventSource, useEventSourceListener } from "react-use-event-source-ts";
+import { Action, Store } from "redux";
+import { useStore } from "react-redux";
+
+// Create a custom hook to simplify the process:
+export function useEventSourceListenerRedux<S, A extends Action>(source: EventSource | null, types: string[], listener: (store: Store<S, A>, e: EventSourceEvent) => void, dependencies: any[] = []) {
+    const store = useStore<S, A>();
+    useEventSourceListener(source, types, e => listener(store, e), dependencies);
+}
 
 function eventHandler(store: Store<State, Action>, e: EventSourceEvent) {
     store.dispatch(addMessages(JSON.parse(e.data)));
@@ -98,13 +105,6 @@ function useEventSourceListener(
     dependencies: any[] = [] // if one of the dependencies changes, the listener will be re-added to the event types.
 ) => void;
 
-// Same as above, but adds a redux store parameter to the listener.
-function useEventSourceListenerRedux<S, A extends Action>(
-    source: EventSource | null,
-    types: string[],
-    listener: (store: Store<S, A>, e: EventSourceEvent) => void,
-    dependencies: any[] = []
-) => void;
 ```
 
 ### Report isssues
