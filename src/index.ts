@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-type EventSourceConstructor = { new(url: string, eventSourceInitDict?: EventSourceInit): EventSource; };
+type EventSourceConstructor = { new (url: string, eventSourceInitDict?: EventSourceInit): EventSource };
 
 export type EventSourceStatus = "init" | "open" | "closed" | "error";
 
@@ -10,8 +10,9 @@ export function useEventSource(url: string, withCredentials?: boolean, ESClass: 
     const source = useRef<EventSource | null>(null);
     const [status, setStatus] = useState<EventSourceStatus>("init");
     useEffect(() => {
-        if(url) {
-            const es = source.current = new ESClass(url, { withCredentials });
+        if (url) {
+            const es = new ESClass(url, { withCredentials });
+            source.current = es;
 
             es.addEventListener("open", () => setStatus("open"));
             es.addEventListener("error", () => setStatus("error"));
@@ -20,20 +21,26 @@ export function useEventSource(url: string, withCredentials?: boolean, ESClass: 
                 source.current = null;
                 es.close();
             };
-        } else {
-            setStatus("closed");
         }
+
+        setStatus("closed");
+
         return undefined;
     }, [url, withCredentials, ESClass]);
 
     return [source.current, status] as const;
 }
 
-export function useEventSourceListener(source: EventSource | null, types: string[], listener: (e: EventSourceEvent) => void, dependencies: any[] = []) {
+export function useEventSourceListener(
+    source: EventSource | null,
+    types: string[],
+    listener: (e: EventSourceEvent) => void,
+    dependencies: any[] = []
+) {
     useEffect(() => {
-        if(source) {
-            types.forEach(type => source.addEventListener(type, listener as any));
-            return () => types.forEach(type => source.removeEventListener(type, listener as any));
+        if (source) {
+            types.forEach((type) => source.addEventListener(type, listener as any));
+            return () => types.forEach((type) => source.removeEventListener(type, listener as any));
         }
         return undefined;
     }, [source, ...dependencies]);
